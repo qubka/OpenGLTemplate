@@ -27,10 +27,6 @@ cmake-build-debug/
 !bin/*.dll
 bin_debug
 
-# External data
-external/
-!external/CMakeLists.txt
-
 # CMake
 CMakeCache.txt
 CMakeFiles
