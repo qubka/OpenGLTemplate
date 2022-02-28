@@ -9,11 +9,6 @@ CAudioManager::~CAudioManager()
 
 bool CAudioManager::Initialise()
 {
-    for (auto& [path, audio] : m_sounds)
-    {
-        delete audio;
-    }
-
     device = alcOpenDevice(nullptr);
     assert(device && "Failed to initialize OPENAL!");
 
@@ -27,6 +22,11 @@ bool CAudioManager::Initialise()
 }
 
 void CAudioManager::Destroy() {
+    for (auto& [path, audio] : m_sounds)
+    {
+        delete audio;
+    }
+
     context = alcGetCurrentContext();
     device = alcGetContextsDevice(context);
 
