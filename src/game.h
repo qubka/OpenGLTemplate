@@ -15,7 +15,7 @@ class CPlane;
 class CFreeTypeFont;
 class CSphere;
 class COpenAssetImportMesh;
-class CAudio;
+class CAudioManager;
 
 class Game {
 private:
@@ -33,7 +33,7 @@ private:
 	COpenAssetImportMesh *m_pBarrelMesh;
 	COpenAssetImportMesh *m_pHorseMesh;
 	CSphere *m_pSphere;
-	CAudio *m_pAudio;
+	CAudioManager *m_pAudioManager;
 
 	// Some other member variables
 	double m_dt;

@@ -40,7 +40,7 @@ Source code drawn from a number of sources and examples, including contributions
 #include "sphere.h"
 #include "matrixstack.h"
 #include "openassetimportmesh.h"
-#include "audio.h"
+#include "audiomanager.h"
 
 // Constructor
 Game::Game() : m_window {"OpenGL Template", {1280, 720}}
@@ -55,7 +55,7 @@ Game::Game() : m_window {"OpenGL Template", {1280, 720}}
 	m_pBarrelMesh = nullptr;
 	m_pHorseMesh = nullptr;
 	m_pSphere = nullptr;
-	m_pAudio = nullptr;
+    m_pAudioManager = nullptr;
 
 	m_dt = 0.0;
 	m_framesPerSecond = 0;
@@ -74,7 +74,9 @@ Game::~Game()
 	delete m_pBarrelMesh;
 	delete m_pHorseMesh;
 	delete m_pSphere;
-	delete m_pAudio;
+
+    m_pAudioManager->Destroy();
+	delete m_pAudioManager;
 
 	if (m_pShaderPrograms != nullptr) {
 		for (auto & m_pShaderProgram : *m_pShaderPrograms)
@@ -99,7 +101,7 @@ void Game::Initialise()
     m_pBarrelMesh = new COpenAssetImportMesh;
     m_pHorseMesh = new COpenAssetImportMesh;
     m_pSphere = new CSphere;
-    m_pAudio = new CAudio;
+    m_pAudioManager = new CAudioManager;
 
     // Set the orthographic and perspective projection matrices based on the image size
     m_pCamera->SetOrthographicProjectionMatrix(m_window.GetWidth(), m_window.GetHeight());
@@ -165,11 +167,10 @@ void Game::Initialise()
     glEnable(GL_CULL_FACE);
 
     // Initialise audio and play background music
-    m_pAudio->Initialise();
-    m_pAudio->LoadEventSound("resources/Audio/Boing.wav");                    // Royalty free sound from freesound.org
-    m_pAudio->LoadMusicStream(
-            "resources/Audio/DST-Garote.mp3");    // Royalty free music from http://www.nosoapradio.us/
-    m_pAudio->PlayMusicStream();
+    m_pAudioManager->Initialise();
+    m_pAudioManager->Load("resources/audio/Boing.wav");                    // Royalty free sound from freesound.org
+    m_pAudioManager->Load("resources/audio/fsm-team-escp-paradox.wav");    // Royalty free sound from freesound.org
+    m_pAudioManager->Play("resources/audio/Boing.wav", m_pCamera->GetPosition());
 }
 
 // Render method runs repeatedly in a loop
@@ -251,8 +252,6 @@ void Game::Render()
 		m_pHorseMesh->Render();
 	modelViewMatrixStack.Pop();
 
-
-	
 	// Render the barrel 
 	modelViewMatrixStack.Push();
 		modelViewMatrixStack.Translate(glm::vec3{100.0f, 0.0f, 0.0f});
@@ -261,7 +260,6 @@ void Game::Render()
 		pMainProgram->SetUniform("matrices.normalMatrix", m_pCamera->ComputeNormalMatrix(modelViewMatrixStack.Top()));
 		m_pBarrelMesh->Render();
 	modelViewMatrixStack.Pop();
-	
 
 	// Render the sphere
 	modelViewMatrixStack.Push();
@@ -306,10 +304,12 @@ void Game::Update()
         m_window.ToggleWireframe();
     }
 
+    m_pAudioManager->Play("resources/audio/fsm-team-escp-paradox.wav", m_pCamera->GetPosition());
+
 	// Update the camera using the amount of time that has elapsed to avoid framerate dependent motion
 	m_pCamera->Update(m_dt);
 
-	m_pAudio->Update();
+	m_pAudioManager->Update();
 }
 
 void Game::DisplayFrameRate()

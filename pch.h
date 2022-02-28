@@ -21,6 +21,7 @@
 #include <utility>
 #include <set>
 #include <map>
+#include <bit>
 #include <unordered_map>
 #include <unordered_set>
 #include <optional>
