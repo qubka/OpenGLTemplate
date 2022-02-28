@@ -130,6 +130,9 @@ void CFreeTypeFont::Print(const std::string& text, int x, int y, int pixelSize)
 		pixelSize = m_loadedPixelSize;
 	float fScale = float(pixelSize) / float(m_loadedPixelSize);
 	for (unsigned char i : text) {
+        if (i == '\0')
+            break;
+
 		if (i == '\n') {
 			iCurX = x;
 			iCurY -= m_newLine*pixelSize / m_loadedPixelSize;

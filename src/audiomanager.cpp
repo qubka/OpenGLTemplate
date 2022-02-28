@@ -9,7 +9,8 @@ CAudioManager::~CAudioManager()
 
 bool CAudioManager::Initialise()
 {
-    for (auto& [path, audio] : m_sounds) {
+    for (auto& [path, audio] : m_sounds)
+    {
         delete audio;
     }
 
@@ -36,7 +37,8 @@ void CAudioManager::Destroy() {
 
 void CAudioManager::Update()
 {
-    for (auto& [path, audio] : m_sounds) {
+    for (auto& [path, audio] : m_sounds)
+    {
         audio->Update();
     }
 }
@@ -52,7 +54,8 @@ bool CAudioManager::Load(const std::string& path)
 
 void CAudioManager::Play(const std::string& path, const glm::vec3& position)
 {
-    if (auto it = m_sounds.find(path); it != m_sounds.end()) {
+    if (auto it = m_sounds.find(path); it != m_sounds.end())
+    {
         auto& sound { *it->second };
         sound.SetPosition(position);
 
@@ -65,7 +68,8 @@ void CAudioManager::Play(const std::string& path, const glm::vec3& position)
 
 void CAudioManager::Stop(const std::string& path)
 {
-    if (auto it = m_sounds.find(path); it != m_sounds.end()) {
+    if (auto it = m_sounds.find(path); it != m_sounds.end())
+    {
         auto& sound { *it->second };
         if (sound.IsPlaying())
         {
@@ -97,6 +101,7 @@ bool CAudioManager::LoadWavHeaderFile(std::ifstream& file,
         std::cerr << "ERROR: could not read RIFF" << std::endl;
         return false;
     }
+
     if(std::strncmp(buffer, "RIFF", 4) != 0)
     {
         std::cerr << "ERROR: file is not a valid WAVE file (header doesn't begin with RIFF)" << std::endl;
@@ -116,6 +121,7 @@ bool CAudioManager::LoadWavHeaderFile(std::ifstream& file,
         std::cerr << "ERROR: could not read WAVE" << std::endl;
         return false;
     }
+
     if(std::strncmp(buffer, "WAVE", 4) != 0)
     {
         std::cerr << "ERROR: file is not a valid WAVE file (header doesn't contain WAVE)" << std::endl;
